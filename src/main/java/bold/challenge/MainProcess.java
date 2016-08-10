@@ -28,22 +28,15 @@ public class MainProcess extends Thread{
 	private static List<String> consideredDep;
 	
 	public static void main(String[] args) {
-		
 		long startTime = System.currentTimeMillis();
 		checkInputs(args);
         String originCSV = args[0];
         String destCSVPath = args[1];
-        //String[] consideredDep = args[1].split(",");
         setConsideredRooms(Arrays.asList(args[2].split(",")));
-        setConsideredDep(Arrays.asList(args[3].split(",")));
-		//String originCSV = "D:/Raul/Bold/Desafio/dataset-400000.csv";
-		//String destCSVPath = "D:/Raul/Bold/Desafio/";
-        //setConsideredRooms(Arrays.asList("all".split(",")));
-        //setConsideredDep(Arrays.asList("HR1,HR5".split(",")));       
+        setConsideredDep(Arrays.asList(args[3].split(",")));  
         BufferedReader br = null;
         String line = "";
-
-        
+       
         // Initialize threads and build department x room pairs
         MultiValueMap pairs = MultiValueMap.decorate(new HashMap<String, String>());
         try {                              
