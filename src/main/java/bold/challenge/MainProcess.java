@@ -33,7 +33,7 @@ public class MainProcess extends Thread{
         //String originCSV = args[0];
         //String[] consideredDep = args[1].split(",");
         //consideredRooms = Arrays.asList(args[2].split(","));
-		String originCSV = "D:/Raul/Bold/Desafio/dataset-200000.csv";
+		String originCSV = "D:/Raul/Bold/Desafio/dataset-400000.csv";
 		String destCSVPath = "D:/Raul/Bold/Desafio/";
         setConsideredRooms(Arrays.asList("all".split(",")));
         setConsideredDep(Arrays.asList("HR1,HR5".split(",")));       
