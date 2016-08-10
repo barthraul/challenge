@@ -1,0 +1,5 @@
+Solution Modeling
+
+The first observation to be done is that the number of the rooms is fixed (6 rooms), while the number of departments is variable (maximum 10).
+
+My first thought was to use Spark for dealing with the data and use DataFrame to structure the input csv file. Doing that, it would be possible to query the data using SparkSQL and make some aggregation to extract the needed output. However, following the environment I would have, I chose for not using it, and for developing the solution using pure Java.
