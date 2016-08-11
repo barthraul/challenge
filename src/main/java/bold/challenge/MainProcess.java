@@ -20,18 +20,23 @@ import org.apache.commons.collections.map.MultiValueMap;
  * INPUT: csf file
  * OUPUT: list of csv files
  */
+
 public class MainProcess extends Thread{
 	private static String roomA = "roomA", roomB = "roomB", roomC = "roomC", roomD = "roomD", roomE = "roomE", roomF = "roomF";
 	static ParsingThread threadRoomA, threadRoomB, threadRoomC, threadRoomD, threadRoomE, threadRoomF;
-	private static Integer quantity;
 	private static List<String> consideredRooms;
 	private static List<String> consideredDep;
+	private static String originCSV;
+	private static String destCSVPath;
+	public static Integer numberOfPairs = 0, filesGenerated = 0;
 	
 	public static void main(String[] args) {
 		long startTime = System.currentTimeMillis();
+		
+		// Check inputs and set up 
 		checkInputs(args);
-        String originCSV = args[0];
-        String destCSVPath = args[1];
+        originCSV = args[0];
+        destCSVPath = args[1];
         setConsideredRooms(Arrays.asList(args[2].split(",")));
         setConsideredDep(Arrays.asList(args[3].split(",")));  
         BufferedReader br = null;
@@ -39,7 +44,8 @@ public class MainProcess extends Thread{
        
         // Initialize threads and build department x room pairs
         MultiValueMap pairs = MultiValueMap.decorate(new HashMap<String, String>());
-        try {                              
+        try {    
+        	System.out.println("\n----------------THREADS----------------");
         	InitializeThreads();
             br = new BufferedReader(new FileReader(originCSV));
             while ((line = br.readLine()) != null) {
@@ -69,24 +75,7 @@ public class MainProcess extends Thread{
         long endTime = System.currentTimeMillis();
         printResults(endTime - startTime);        
 	}
-	
-	public static void printResults(long duration){
-		System.out.println("\n-------RESULTS-------");
-		System.out.println("Duration: " +duration+" milliseconds");
-        System.out.println("Files Generated: " +getQuantityGeneratedFiles()+" files");
-	}
-	
-	public static String buildFileRoomName(String roomType){
-		return "-"+roomType;
-	}
-	
-	public static boolean checkRoomFilterCondition(String roomType){
-		if(getConsideredRooms().contains(roomType) || getConsideredRooms().contains("all"))
-			return true;
-		else
-			return false;
-	}
-	
+		
 	public static void checkInputs(String[] args){
 		if (args.length < 4) {
 		      System.err.println("Usage: BoldChallenge <inputFile> <outputFile> <listOfRooms> <listOfDepart>" +
@@ -112,10 +101,10 @@ public class MainProcess extends Thread{
 			FileWriter fw;
 			BufferedWriter bw;
 			File file;
-			Integer filesGenerated = 0;
 			ArrayList<String> values = new ArrayList<String>();
             while(it.hasNext()){
-            	key = it.next();                	
+            	key = it.next();   
+            	numberOfPairs++;
 	            file = new File(destCSVPath+key+".csv");
 	    		if (!file.exists())
 	    			file.createNewFile();
@@ -130,10 +119,28 @@ public class MainProcess extends Thread{
 	    		filesGenerated++;
 	    		values.clear();
             }
-            setQuantityGeneratedFiles(filesGenerated);
 		 }
          catch (IOException e) {e.printStackTrace();}
-   }
+    }
+	
+	public static void printResults(long duration){
+		System.out.println("\n----------------RESULTS----------------");
+		System.out.println("DURATION: " +duration+" milliseconds");
+        System.out.println("GENERATED FILES: " +filesGenerated+" files");
+        System.out.println("NUMBER OF PAIRS (department x room): " +numberOfPairs);
+        System.out.println("FILES GENERATED AT: " +destCSVPath);
+	}
+	
+	public static String buildFileRoomName(String roomType){
+		return "-"+roomType;
+	}
+	
+	public static boolean checkRoomFilterCondition(String roomType){
+		if(getConsideredRooms().contains(roomType) || getConsideredRooms().contains("all"))
+			return true;
+		else
+			return false;
+	}
 
 	public static List<String> getConsideredDep() {
 		return consideredDep;
@@ -149,13 +156,5 @@ public class MainProcess extends Thread{
 
 	public static void setConsideredRooms(List<String> considered) {
 		consideredRooms = considered;
-	}
-	
-	public static void setQuantityGeneratedFiles(Integer qty){
-		quantity = qty;
-	}
-	
-	public static Integer getQuantityGeneratedFiles(){
-		return quantity;
 	}
 }

@@ -1,9 +1,7 @@
 package bold.challenge.Tests;
 
 import java.util.Arrays;
-
 import org.junit.Test;
-
 import bold.challenge.MainProcess;
 import bold.challenge.ParsingThread;
 import junit.framework.TestCase;
